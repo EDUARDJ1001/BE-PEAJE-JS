@@ -12,6 +12,7 @@ export const obtenerEmpleados = async () => {
     }
 };
 
+//Funcion para registrar empleados
 export const registrarEmpleado = async (nombre, apellido, identidad, cargoId, generoId) => {
     try {
         const connection = await connectDB();

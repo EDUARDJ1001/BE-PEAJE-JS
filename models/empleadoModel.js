@@ -1,5 +1,5 @@
 import connectDB from "../config/db.js";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export const obtenerEmpleados = async () => {
     try {

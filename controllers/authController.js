@@ -28,7 +28,6 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: 'Contraseña incorrecta.' });
         }
 
-        // Generar token JWT
         const token = jwt.sign(
             { id: user.Id, username: user.Username, cargoId: user.Cargo_Id, nombre: user.Nombre, apellido: user.Apellido },
             process.env.JWT_SECRET,
@@ -39,7 +38,6 @@ export const login = async (req, res) => {
         if (user.Cargo_Id === 1 || user.Cargo_Id === 2) {
             dashboardRoute = '/pages/admin/dashboardAdmin';
         } else if (user.Cargo_Id === 3) {
-            // Limpieza de la tabla Conteo_Boletos para operarios
             await db.execute('DELETE FROM Conteo_Boletos');
             dashboardRoute = '/pages/empleado/dashboardEmpleado';
         } else {

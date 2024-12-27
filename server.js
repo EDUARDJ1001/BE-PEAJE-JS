@@ -31,7 +31,7 @@ const HOST = process.env.MYSQL_ADDON_HOST || '0.0.0.0';
 app.listen(PORT, HOST, async () => {
     try {
         await connectDB();
-        console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
+        console.log(`Servidor corriendo en http://${MYSQL_ADDON_HOST}:${MYSQL_ADDON_PORT}`);
     } catch (err) {
         console.error('Error al conectar la base de datos al iniciar el servidor:', err);
     }

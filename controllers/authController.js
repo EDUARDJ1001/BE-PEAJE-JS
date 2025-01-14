@@ -39,7 +39,7 @@ export const login = async (req, res) => {
             dashboardRoute = '/pages/admin/dashboardAdmin';
         } else if (user.Cargo_Id === 3) {
             await db.execute('DELETE FROM Conteo_Boletos');
-            dashboardRoute = '/pages/empleado/dashboardEmpleado';
+            dashboardRoute = '/pages/empleado/select';
         } else {
             return res.status(403).json({ message: 'Rol no autorizado.' });
         }

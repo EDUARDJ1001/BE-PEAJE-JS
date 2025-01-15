@@ -1,10 +1,18 @@
 import express from "express";
-import { obtenerConteoBoletos, actualizarConteoBoletos, limpiarConteoBoletos } from "../controllers/conteoBoletoController.js";
+import crearModeloConteoBoletos from "../models/conteoBoletoModel.js";
+import crearControladorConteoBoletos from "../controllers/conteoBoletoController.js";
 
-const router = express.Router();
+const crearRutasConteoBoletos = (nombreTabla) => {
+  const modelo = crearModeloConteoBoletos(nombreTabla);
+  const controlador = crearControladorConteoBoletos(modelo);
 
-router.get("/", obtenerConteoBoletos);
-router.post("/", actualizarConteoBoletos);
-router.post('/limpiar-conteo-boletos', limpiarConteoBoletos);
+  const router = express.Router();
 
-export default router;
+  router.get("/", controlador.obtenerConteoBoletos);
+  router.post("/", controlador.actualizarConteoBoletos);
+  router.post("/limpiar-conteo-boletos", controlador.limpiarConteoBoletos);
+
+  return router;
+};
+
+export default crearRutasConteoBoletos;

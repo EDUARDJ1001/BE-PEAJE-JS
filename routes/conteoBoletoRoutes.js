@@ -11,6 +11,7 @@ const crearRutasConteoBoletos = (nombreTabla) => {
   router.get("/", controlador.obtenerConteoBoletos);
   router.post("/", controlador.actualizarConteoBoletos);
   router.post("/limpiar-conteo-boletos", controlador.limpiarConteoBoletos);
+  router.get("/ultimo-ticket", controlador.obtenerUltimoTicket);
 
   return router;
 };

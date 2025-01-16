@@ -1,5 +1,13 @@
 import { obtenerEstado as obtenerEstadoModel } from "../models/estadoModel.js";
-import connectDB from "../config/db.js";
+
+export const obtenerEstado = async (req, res) => {
+    try {
+        const estados = await obtenerEstadoModel();
+        res.status(200).json(estados);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener estados de vias', error});
+    }
+}
 
 export const seleccionarVia = async (req, res) => {
     const { via } = req.body;
@@ -27,3 +35,4 @@ export const seleccionarVia = async (req, res) => {
         return res.status(500).json({ message: 'Error al seleccionar la vía', error });
     }
 };
+

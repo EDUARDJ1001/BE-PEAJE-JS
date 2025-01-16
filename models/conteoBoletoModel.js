@@ -83,26 +83,24 @@ const crearModeloConteoBoletos = (nombreTabla) => {
 
   const obtenerUltimoTicket = async () => {
     try {
-      const connection = await connectDB();
-      const query = `
-        SELECT 
-          vb.Descripcion,
-          vb.Valor,
-          cb.Cantidad,
-          cb.Total
-        FROM ${nombreTabla} cb
-        JOIN Valor_Boletos vb ON cb.Valor_Boleto_Id = vb.Id
-        ORDER BY cb.Id DESC
-        LIMIT 1;
-      `;
-      const [rows] = await connection.query(query);
-      return rows[0] || null; // Devolver el último ticket o null si no hay
+        const connection = await connectDB();
+        const query = `
+            SELECT 
+                AUTO_INCREMENT as lastTicketId
+            FROM 
+                INFORMATION_SCHEMA.TABLES
+            WHERE 
+                TABLE_SCHEMA = DATABASE() AND 
+                TABLE_NAME = ?;
+        `;
+        const [rows] = await connection.query(query, [nombreTabla]);
+        return rows[0]?.lastTicketId || 1;
     } catch (err) {
-      console.error(`Error al obtener el último ticket de ${nombreTabla}:`, err);
-      throw err;
+        console.error(`Error al obtener el último ticket de ${nombreTabla}:`, err);
+        throw err;
     }
-  };
-  
+};
+
 
   return {
     obtenerConteoBoletos,

@@ -9,9 +9,9 @@ const crearRutasConteoBoletos = (nombreTabla) => {
   const router = express.Router();
 
   router.get("/", controlador.obtenerConteoBoletos);
+  router.get("/ultimo-ticket", controlador.obtenerUltimoTicket);
   router.post("/", controlador.actualizarConteoBoletos);
   router.post("/limpiar-conteo-boletos", controlador.limpiarConteoBoletos);
-  router.get("/ultimo-ticket", controlador.obtenerUltimoTicket);
 
   return router;
 };

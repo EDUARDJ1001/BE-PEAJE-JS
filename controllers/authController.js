@@ -1,9 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import connectDB from '../config/db.js';
-import Redis from 'ioredis';
-
-const redis = new Redis();
+import redis from '../models/redisClient.js';
 
 export const login = async (req, res) => {
     const { username, password } = req.body;

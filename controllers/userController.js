@@ -1,4 +1,4 @@
-import client from "../models/redisClient";
+import client from "../models/redisClient.js";
 
 export const getUserData = async (req, res) => {
     try {

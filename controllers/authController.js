@@ -1,6 +1,9 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import connectDB from '../config/db.js';
+import Redis from 'ioredis';
+
+const redis = new Redis();
 
 export const login = async (req, res) => {
     const { username, password } = req.body;
@@ -33,6 +36,8 @@ export const login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
+
+        await redis.set(`session:${user.Id}`, token, 'EX', 3600);
 
         let dashboardRoute;
         if (user.Cargo_Id === 1 || user.Cargo_Id === 2) {

@@ -8,7 +8,8 @@ import empleadoRoutes from './empleadoRoutes.js';
 import crearRutasConteoBoletos from './conteoBoletoRoutes.js';
 import logRoutes from './logRoutes.js';
 import reporteVentasRoutes from './reporteVentasRoutes.js';
-import authRoutes from './authRoutes.js'
+import authRoutes from './authRoutes.js';
+import userRoutes from './userRoutes.js';
 
 const registerRoutes = (app) => {
     app.use('/api/generos', generoRoutes);
@@ -21,6 +22,7 @@ const registerRoutes = (app) => {
     app.use('/api/logs-usuarios', logRoutes);
     app.use('/api/reportes-ventas', reporteVentasRoutes);
     app.use('/api/auth', authRoutes);
+    app.use('api/userRoutes', userRoutes);
 
     app.use('/api/conteo-boletos', crearRutasConteoBoletos('Conteo_Boletos'));
     app.use('/api/conteo-boletos-v2', crearRutasConteoBoletos('Conteo_Boletos_V2'));

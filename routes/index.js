@@ -31,6 +31,9 @@ const registerRoutes = (app) => {
     app.use('/api/conteo-boletos-v4', crearRutasConteoBoletos('Conteo_Boletos_V4'));
 
     app.use('/api/contador', crearRutasContador('Contador_V1'));
+    app.use('/api/contador-v2', crearRutasContador('Contador_V2'));
+    app.use('/api/contador-v3', crearRutasContador('Contador_V3'));
+    app.use('/api/contador-v4', crearRutasContador('Contador_V4'));
 };
 
 export default registerRoutes;

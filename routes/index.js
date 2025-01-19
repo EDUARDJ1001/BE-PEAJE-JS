@@ -10,6 +10,7 @@ import logRoutes from './logRoutes.js';
 import reporteVentasRoutes from './reporteVentasRoutes.js';
 import authRoutes from './authRoutes.js';
 import userRoutes from './userRoutes.js';
+import crearRutasContador from './contadorRoutes.js';
 
 const registerRoutes = (app) => {
     app.use('/api/generos', generoRoutes);
@@ -28,6 +29,8 @@ const registerRoutes = (app) => {
     app.use('/api/conteo-boletos-v2', crearRutasConteoBoletos('Conteo_Boletos_V2'));
     app.use('/api/conteo-boletos-v3', crearRutasConteoBoletos('Conteo_Boletos_V3'));
     app.use('/api/conteo-boletos-v4', crearRutasConteoBoletos('Conteo_Boletos_V4'));
+
+    app.use('/api/contador', crearRutasContador('Contador_V1'));
 };
 
 export default registerRoutes;

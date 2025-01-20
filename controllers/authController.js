@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import connectDB from '../config/db.js';
-import redis from '../models/redisClient.js';
 
+// Función para manejar el inicio de sesión
 export const login = async (req, res) => {
     const { username, password } = req.body;
 
@@ -35,8 +35,6 @@ export const login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        await redis.set(`session:${user.Id}`, token, 'EX', 3600);
-
         let dashboardRoute;
         if (user.Cargo_Id === 1 || user.Cargo_Id === 2) {
             dashboardRoute = '/pages/admin/dashboardAdmin';
@@ -61,6 +59,29 @@ export const login = async (req, res) => {
         });
     } catch (error) {
         console.error('Error en el login:', error);
+        return res.status(500).json({ message: 'Error en el servidor.' });
+    }
+};
+
+export const updateSelectedVia = async (req, res) => {
+    const { selectedVia } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const newToken = jwt.sign(
+            { ...decoded, selectedVia },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        return res.json({
+            message: 'Vía seleccionada actualizada.',
+            token: newToken,
+        });
+    } catch (error) {
+        console.error('Error al actualizar la vía:', error);
         return res.status(500).json({ message: 'Error en el servidor.' });
     }
 };

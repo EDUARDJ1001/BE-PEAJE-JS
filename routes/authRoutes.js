@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, updateSelectedVia } from './authController.js';
+import { login, updateSelectedVia } from '../controllers/authController.js';
 
 const router = express.Router();
 

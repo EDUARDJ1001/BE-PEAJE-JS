@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import connectDB from '../config/db.js';
-import redisClient from '../models/redisClient.js';
 
 export const login = async (req, res) => {
     const { username, password } = req.body;
@@ -35,8 +34,6 @@ export const login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        await redisClient.set(`user:${user.Id}:token`, token, { EX: 3600 }); 
-
         let dashboardRoute;
         if (user.Cargo_Id === 1 || user.Cargo_Id === 2) {
             dashboardRoute = '/pages/admin/dashboardAdmin';
@@ -65,24 +62,6 @@ export const login = async (req, res) => {
     }
 };
 
-export const storeToken = async (req, res) => {
-    const { token } = req.body;
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
-        
-        await redisClient.set(`userToken:${userId}`, token, {
-            EX: 3600,
-        });
-
-        res.status(200).json({ message: 'Token almacenado correctamente.' });
-    } catch (error) {
-        console.error('Error al almacenar el token en Redis:', error);
-        res.status(500).json({ message: 'Error al almacenar el token.' });
-    }
-};
-
 export const updateSelectedVia = async (req, res) => {
     const { selectedVia } = req.body;
     const token = req.headers.authorization.split(' ')[1];
@@ -90,18 +69,11 @@ export const updateSelectedVia = async (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        const redisToken = await redisClient.get(`user:${decoded.id}:token`);
-        if (!redisToken || redisToken !== token) {
-            return res.status(401).json({ message: 'Token no válido o expirado.' });
-        }
-
         const newToken = jwt.sign(
             { ...decoded, selectedVia },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
-
-        await redisClient.set(`user:${decoded.id}:token`, newToken, { EX: 3600 });
 
         return res.json({
             message: 'Vía seleccionada actualizada.',

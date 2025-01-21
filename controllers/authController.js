@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import connectDB from '../config/db.js';
 
-// Función para manejar el inicio de sesión
 export const login = async (req, res) => {
     const { username, password } = req.body;
 

@@ -48,7 +48,7 @@ export const registrarEmpleado = async (nombre, apellido, identidad, cargoId, ge
 
 export const actualizarEmpleado = async (req, res) => {
     const empleadoId = req.params.id;
-    const { nombre, apellido, identidad, cargoId, generoId, username, password } = req.body;
+    const { Nombre, Apellido, Identidad, Cargo_Id, Genero_Id, Username, Password } = req.body;
 
     try {
         const connection = await connectDB();
@@ -56,39 +56,39 @@ export const actualizarEmpleado = async (req, res) => {
         const campos = [];
         const valores = [];
 
-        if (nombre) {
+        if (Nombre) {
             campos.push("Nombre = ?");
-            valores.push(nombre);
+            valores.push(Nombre);
         }
 
-        if (apellido) {
+        if (Apellido) {
             campos.push("Apellido = ?");
-            valores.push(apellido);
+            valores.push(Apellido);
         }
 
-        if (identidad) {
+        if (Identidad) {
             campos.push("Identidad = ?");
-            valores.push(identidad);
+            valores.push(Identidad);
         }
 
-        if (cargoId) {
+        if (Cargo_Id) {
             campos.push("Cargo_Id = ?");
-            valores.push(cargoId);
+            valores.push(Cargo_Id);
         }
 
-        if (generoId) {
+        if (Genero_Id) {
             campos.push("Genero_Id = ?");
-            valores.push(generoId);
+            valores.push(Genero_Id);
         }
 
-        if (username) {
+        if (Username) {
             campos.push("Username = ?");
-            valores.push(username);
+            valores.push(Username);
         }
 
-        if (password) {
+        if (Password) {
             const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            const hashedPassword = await bcrypt.hash(Password, saltRounds);
             campos.push("Password = ?");
             valores.push(hashedPassword);
         }

@@ -46,79 +46,39 @@ export const registrarEmpleado = async (nombre, apellido, identidad, cargoId, ge
     }
 };
 
-export const actualizarEmpleado = async (req, res) => {
-    const empleadoId = req.params.id;
-    const { Nombre, Apellido, Identidad, Cargo_Id, Genero_Id, Username, Password } = req.body;
-
+export const actualizarEmpleado = async (id, datos) => {
     try {
         const connection = await connectDB();
-
         const campos = [];
         const valores = [];
 
-        if (Nombre) {
-            campos.push("Nombre = ?");
-            valores.push(Nombre);
-        }
-
-        if (Apellido) {
-            campos.push("Apellido = ?");
-            valores.push(Apellido);
-        }
-
-        if (Identidad) {
-            campos.push("Identidad = ?");
-            valores.push(Identidad);
-        }
-
-        if (Cargo_Id) {
+        if (datos.cargoId) {
             campos.push("Cargo_Id = ?");
-            valores.push(Cargo_Id);
+            valores.push(datos.cargoId);
         }
 
-        if (Genero_Id) {
-            campos.push("Genero_Id = ?");
-            valores.push(Genero_Id);
-        }
-
-        if (Username) {
-            campos.push("Username = ?");
-            valores.push(Username);
-        }
-
-        if (Password) {
+        if (datos.password) {
             const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(Password, saltRounds);
+            const hashedPassword = await bcrypt.hash(datos.password, saltRounds);
             campos.push("Password = ?");
             valores.push(hashedPassword);
         }
 
         if (campos.length === 0) {
-            return res.status(400).json({ message: "No se proporcionaron datos para actualizar." });
+            return 0;
         }
 
-        valores.push(empleadoId);
+        valores.push(id);
 
         const query = `UPDATE Empleados SET ${campos.join(", ")} WHERE Id = ?`;
+        const [result] = await connection.query(query, valores);
 
-        connection.query(query, valores, (err, result) => {
-            if (err) {
-                console.error("Error al actualizar empleado:", err);
-                return res.status(500).json({ message: "Error al actualizar empleado", error: err });
-            }
-
-            if (result.affectedRows > 0) {
-                return res.status(200).json({ message: "Empleado actualizado con éxito" });
-            } else {
-                return res.status(404).json({ message: "Empleado no encontrado o no hubo cambios" });
-            }
-        });
+        return result.affectedRows;
     } catch (err) {
         console.error("Error al actualizar empleado:", err);
-        return res.status(500).json({ message: "Error al actualizar empleado", error: err });
+        throw err;
     }
 };
-
 
 export const eliminarEmpleado = async (id) => {
     try {

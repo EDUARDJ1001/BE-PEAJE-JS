@@ -1,4 +1,5 @@
 import client from "../models/redisClient.js";
+import { getUserDataFromSession } from "../models/user.js";
 
 export const getUserData = async (req, res) => {
     try {
@@ -37,5 +38,18 @@ export const getTokens = async (req, res) => {
     } catch (error) {
         console.error('Error al recuperar los tokens:', error);
         res.status(500).json({ message: 'Error al recuperar los tokens', error });
+    }
+};
+
+export const getUserDataSession = async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        const userData = await getUserDataFromSession(userId);
+
+        res.json(userData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
     }
 };

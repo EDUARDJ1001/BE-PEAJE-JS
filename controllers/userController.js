@@ -22,3 +22,20 @@ export const setUserData = async (req, res) => {
         res.status(500).json({ message: 'Error al almacenar datos de usuario', error });
     }
 };
+
+export const getTokens = async (req, res) => {
+    try {
+        const keys = await redisClient.keys('user:*:token');
+        
+        const tokens = {};
+        for (const key of keys) {
+            const token = await redisClient.get(key);
+            tokens[key] = token;
+        }
+
+        res.json(tokens);
+    } catch (error) {
+        console.error('Error al recuperar los tokens:', error);
+        res.status(500).json({ message: 'Error al recuperar los tokens', error });
+    }
+};

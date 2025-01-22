@@ -79,8 +79,8 @@ export const login = async (req, res) => {
 export const updateSelectedVia = async (req, res) => {
     const { selectedVia } = req.body;
 
-    if (!selectedVia) {
-        return res.status(400).json({ message: 'La vía seleccionada es requerida.' });
+    if (!selectedVia || !Number.isInteger(selectedVia)) {
+        return res.status(400).json({ message: 'La vía seleccionada debe ser un número entero.' });
     }
 
     const authorizationHeader = req.headers.authorization;
@@ -94,6 +94,7 @@ export const updateSelectedVia = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         const db = await connectDB();
+
         const username = decoded.username;
 
         const [result] = await db.execute(
@@ -107,15 +108,8 @@ export const updateSelectedVia = async (req, res) => {
             return res.status(404).json({ message: 'No se encontró el usuario para actualizar.' });
         }
 
-        const newToken = jwt.sign(
-            { ...decoded, selectedVia },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-
         return res.json({
-            message: 'Vía seleccionada actualizada.',
-            token: newToken,
+            message: 'Vía seleccionada actualizada correctamente.',
         });
     } catch (error) {
         console.error('Error al actualizar la vía:', error);

@@ -94,20 +94,23 @@ export const updateSelectedVia = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         const db = await connectDB();
-        
-        const username = decoded.username; 
+        const username = decoded.username;
+
+        const [result] = await db.execute(
+            `UPDATE Empleados 
+             SET SelectedVia = ? 
+             WHERE Username = ?`,
+            [selectedVia, username]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'No se encontró el usuario para actualizar.' });
+        }
 
         const newToken = jwt.sign(
             { ...decoded, selectedVia },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
-        );
-
-        await db.execute(
-            `UPDATE Empleados 
-             SET SelectedVia = ? 
-             WHERE Username = ?`,
-            [selectedVia, username]
         );
 
         return res.json({

@@ -52,7 +52,7 @@ export const login = async (req, res) => {
 
         await db.execute(
             `UPDATE Empleados 
-             SET LoginTime = ?, Token = ?, ExpirationToken = ?
+             SET LoginTime = ?, Token = ?, ExpirationToken = ?, isLoggedIn = true 
              WHERE Username = ?`,
             [loginTime, token, expirationTime, username]
         );

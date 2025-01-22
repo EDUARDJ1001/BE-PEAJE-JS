@@ -79,8 +79,8 @@ export const login = async (req, res) => {
 export const updateSelectedVia = async (req, res) => {
     const { selectedVia } = req.body;
 
-    if (!selectedVia || isNaN(selectedVia)) {
-        return res.status(400).json({ message: 'La vía seleccionada es requerida y debe ser un número.' });
+    if (!selectedVia) {
+        return res.status(400).json({ message: 'La vía seleccionada es requerida.' });
     }
 
     const authorizationHeader = req.headers.authorization;
@@ -93,9 +93,9 @@ export const updateSelectedVia = async (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        const { username } = decoded;
-
         const db = await connectDB();
+        
+        const username = decoded.username; 
 
         await db.execute(
             `UPDATE Empleados 
@@ -111,16 +111,12 @@ export const updateSelectedVia = async (req, res) => {
         );
 
         return res.json({
-            message: 'Vía seleccionada actualizada correctamente.',
+            message: 'Vía seleccionada actualizada.',
             token: newToken,
         });
     } catch (error) {
         console.error('Error al actualizar la vía:', error);
-
-        if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ message: 'Token inválido.' });
-        }
-
         return res.status(500).json({ message: 'Error en el servidor.' });
     }
 };
+

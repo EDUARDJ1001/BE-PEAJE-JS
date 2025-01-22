@@ -12,7 +12,7 @@ export const login = async (req, res) => {
     try {
         const db = await connectDB();
 
-        const [rows] = await db.execute('SELECT * FROM Users WHERE Username = ?', [username]);
+        const [rows] = await db.execute('SELECT * FROM Empleados WHERE Username = ?', [username]);
 
         if (rows.length === 0) {
             return res.status(401).json({ message: 'Usuario no encontrado.' });

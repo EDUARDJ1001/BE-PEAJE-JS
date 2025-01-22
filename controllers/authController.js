@@ -76,13 +76,30 @@ export const login = async (req, res) => {
     }
 };
 
-
 export const updateSelectedVia = async (req, res) => {
     const { selectedVia } = req.body;
-    const token = req.headers.authorization.split(' ')[1];
+
+    if (!selectedVia) {
+        return res.status(400).json({ message: 'La vía seleccionada es requerida.' });
+    }
+
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Token no proporcionado o inválido.' });
+    }
+
+    const token = authorizationHeader.split(' ')[1];
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const db = await connectDB();
+        await db.execute(
+            `UPDATE Empleados 
+             SET SelectedVia = ? 
+             WHERE Id = ?`,
+            [selectedVia, decoded.id]
+        );
 
         const newToken = jwt.sign(
             { ...decoded, selectedVia },

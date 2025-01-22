@@ -97,17 +97,17 @@ export const updateSelectedVia = async (req, res) => {
         
         const username = decoded.username; 
 
+        const newToken = jwt.sign(
+            { ...decoded, selectedVia },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
         await db.execute(
             `UPDATE Empleados 
              SET SelectedVia = ? 
              WHERE Username = ?`,
             [selectedVia, username]
-        );
-
-        const newToken = jwt.sign(
-            { ...decoded, selectedVia },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
         );
 
         return res.json({

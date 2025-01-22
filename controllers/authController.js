@@ -12,7 +12,10 @@ export const login = async (req, res) => {
     try {
         const db = await connectDB();
 
-        const [rows] = await db.execute('SELECT * FROM Empleados WHERE Username = ?', [username]);
+        const [rows] = await db.execute(
+            'SELECT * FROM Empleados WHERE Username = ?',
+            [username]
+        );
 
         if (rows.length === 0) {
             return res.status(401).json({ message: 'Usuario no encontrado.' });
@@ -31,7 +34,12 @@ export const login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        await db.execute('UPDATE Users SET Token = ? WHERE Id = ?', [token, user.Id]);
+        await db.execute('UPDATE Users SET Token = ?, SelectedVia = ?, LoginTime = ? WHERE Id = ?', [
+            token,
+            null,
+            new Date().toISOString(),
+            user.Id
+        ]);
 
         let dashboardRoute;
         if (user.Cargo_Id === 1 || user.Cargo_Id === 2) {
@@ -66,14 +74,7 @@ export const updateSelectedVia = async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
 
     try {
-        const db = await connectDB();
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
-
-        if (![1, 2, 3, 4].includes(selectedVia)) {
-            return res.status(400).json({ message: 'Vía no válida.' });
-        }
 
         const newToken = jwt.sign(
             { ...decoded, selectedVia },
@@ -95,4 +96,3 @@ export const updateSelectedVia = async (req, res) => {
         return res.status(500).json({ message: 'Error en el servidor.' });
     }
 };
-

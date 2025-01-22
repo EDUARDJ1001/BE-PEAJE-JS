@@ -1,5 +1,5 @@
 import express from 'express';
-import { generarUserToken, obtenerUserToken, obtenerUserPorVia } from '../controllers/userController';
+import { generarUserToken, obtenerUserToken, obtenerUserPorVia } from '../controllers/userController.js';
 
 const router = express.Router();
 

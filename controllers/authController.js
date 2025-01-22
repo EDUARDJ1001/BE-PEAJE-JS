@@ -97,8 +97,8 @@ export const updateSelectedVia = async (req, res) => {
         await db.execute(
             `UPDATE Empleados 
              SET SelectedVia = ? 
-             WHERE Id = ?`,
-            [selectedVia, decoded.id]
+             WHERE Username = ?`,
+            [selectedVia, username]
         );
 
         const newToken = jwt.sign(

@@ -34,13 +34,6 @@ export const login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        await db.execute('UPDATE Users SET Token = ?, SelectedVia = ?, LoginTime = ? WHERE Id = ?', [
-            token,
-            null,
-            new Date().toISOString(),
-            user.Id
-        ]);
-
         let dashboardRoute;
         if (user.Cargo_Id === 1 || user.Cargo_Id === 2) {
             dashboardRoute = '/pages/admin/dashboardAdmin';
@@ -80,11 +73,6 @@ export const updateSelectedVia = async (req, res) => {
             { ...decoded, selectedVia },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
-        );
-
-        await db.execute(
-            'UPDATE Users SET Token = ?, SelectedVia = ? WHERE Id = ?',
-            [newToken, selectedVia, userId]
         );
 
         return res.json({

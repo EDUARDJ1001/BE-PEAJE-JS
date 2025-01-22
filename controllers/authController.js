@@ -35,13 +35,27 @@ export const login = async (req, res) => {
         );
 
         let dashboardRoute;
-        if (user.Cargo_Id === 1 || user.Cargo_Id === 2) {
-            dashboardRoute = '/pages/admin/dashboardAdmin';
-        } else if (user.Cargo_Id === 3) {
-            dashboardRoute = '/pages/empleado/select';
-        } else {
-            return res.status(403).json({ message: 'Rol no autorizado.' });
+        switch (user.Cargo_Id) {
+            case 1:
+            case 2:
+                dashboardRoute = '/pages/admin/dashboardAdmin';
+                break;
+            case 3:
+                dashboardRoute = '/pages/empleado/select';
+                break;
+            default:
+                return res.status(403).json({ message: 'Rol no autorizado.' });
         }
+
+        const loginTime = new Date();
+        const expirationTime = new Date(Date.now() + 3600 * 1000);
+
+        await db.execute(
+            `UPDATE Empleados 
+             SET LoginTime = ?, Token = ?, ExpirationToken = ?
+             WHERE Username = ?`,
+            [loginTime, token, expirationTime, username]
+        );
 
         return res.json({
             message: 'Inicio de sesión exitoso.',
@@ -54,13 +68,14 @@ export const login = async (req, res) => {
                 apellido: user.Apellido,
             },
             dashboardRoute,
-            loginTime: new Date().toISOString(),
+            loginTime: loginTime.toISOString(),
         });
     } catch (error) {
         console.error('Error en el login:', error);
         return res.status(500).json({ message: 'Error en el servidor.' });
     }
 };
+
 
 export const updateSelectedVia = async (req, res) => {
     const { selectedVia } = req.body;

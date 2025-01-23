@@ -90,12 +90,37 @@ export const updateSelectedVia = async (req, res) => {
 
     const token = authorizationHeader.split(' ')[1];
 
+    let decoded;
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+        console.error('Error en la verificación del token:', err);
+        return res.status(401).json({ message: 'Token inválido o expirado.' });
+    }
 
+    const username = decoded.username;
+
+    if (!username) {
+        return res.status(400).json({ message: 'El token no contiene un nombre de usuario válido.' });
+    }
+
+    try {
         const db = await connectDB();
-        
-        const username = decoded.username; 
+
+        if (!db) {
+            return res.status(500).json({ message: 'Error al conectar con la base de datos.' });
+        }
+
+        const [result] = await db.execute(
+            `UPDATE Empleados 
+             SET SelectedVia = ? 
+             WHERE Username = ?`,
+            [selectedVia, username]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
 
         const newToken = jwt.sign(
             { ...decoded, selectedVia },
@@ -103,19 +128,18 @@ export const updateSelectedVia = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        await db.execute(
-            `UPDATE Empleados 
-             SET SelectedVia = ? 
-             WHERE Username = ?`,
-            [selectedVia, username]
-        );
-
         return res.json({
             message: 'Vía seleccionada actualizada.',
             token: newToken,
         });
     } catch (error) {
-        console.error('Error al actualizar la vía:', error);
+        console.error('Error al actualizar la vía:', {
+            token,
+            decoded,
+            selectedVia,
+            error: error.message,
+        });
         return res.status(500).json({ message: 'Error en el servidor.' });
     }
 };
+

@@ -52,10 +52,11 @@ export const login = async (req, res) => {
 
         await db.execute(
             `UPDATE Empleados 
-             SET LoginTime = ?, Token = ?, ExpirationToken = ?, isLoggedIn = true 
+             SET LoginTime = ?, Token = ?, ExpirationToken = ?, isLoggedIn = true ${user.Cargo_Id === 3 ? ', SelectedVia = NULL' : ''}
              WHERE Username = ?`,
             [loginTime, token, expirationTime, username]
         );
+
 
         return res.json({
             message: 'Inicio de sesión exitoso.',
@@ -94,8 +95,24 @@ export const updateSelectedVia = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         const db = await connectDB();
-        
+
         const username = decoded.username;
+
+        const [rows] = await db.execute(
+            `SELECT Cargo_Id FROM Empleados 
+             WHERE Username = ?`,
+            [username]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+
+        const user = rows[0];
+
+        if (user.Cargo_Id !== 3) {
+            return res.status(400).json({ message: 'Este usuario no necesita seleccionar una vía.' });
+        }
 
         await db.execute(
             `UPDATE Empleados 
@@ -112,4 +129,3 @@ export const updateSelectedVia = async (req, res) => {
         return res.status(500).json({ message: 'Error en el servidor.' });
     }
 };
-

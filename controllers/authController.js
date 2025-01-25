@@ -129,3 +129,108 @@ export const updateSelectedVia = async (req, res) => {
         return res.status(500).json({ message: 'Error en el servidor.' });
     }
 };
+
+export const logoutVia1 = async (req, res) => {
+    try {
+        const db = await connectDB();
+
+        const [rows] = await db.execute(
+            'SELECT * FROM Empleados WHERE IsLoggedIn = 1 AND SelectedVia = 1 LIMIT 1'
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No hay usuarios en la vía 1.' });
+        }
+
+        const user = rows[0];
+
+        await db.execute(
+            'UPDATE Empleados SET IsLoggedIn = NULL, SelectedVia = NULL WHERE Id = ?',
+            [user.Id]
+        );
+
+        return res.status(200).json({ message: 'Usuario actualizado correctamente.' });
+    } catch (error) {
+        console.error('Error al cerrar sesión en vía 1:', error);
+        return res.status(500).json({ message: 'Error en el servidor.' });
+    }
+};
+
+export const logoutVia2 = async (req, res) => {
+    try {
+        const db = await connectDB();
+
+        const [rows] = await db.execute(
+            'SELECT * FROM Empleados WHERE IsLoggedIn = 1 AND SelectedVia = 2 LIMIT 1'
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No hay usuarios en la vía 2.' });
+        }
+
+        const user = rows[0];
+
+        await db.execute(
+            'UPDATE Empleados SET IsLoggedIn = NULL, SelectedVia = NULL WHERE Id = ?',
+            [user.Id]
+        );
+
+        return res.status(200).json({ message: 'Usuario actualizado correctamente.' });
+    } catch (error) {
+        console.error('Error al cerrar sesión en vía 2:', error);
+        return res.status(500).json({ message: 'Error en el servidor.' });
+    }
+};
+
+export const logoutVia3 = async (req, res) => {
+    try {
+        const db = await connectDB();
+
+        const [rows] = await db.execute(
+            'SELECT * FROM Empleados WHERE IsLoggedIn = 1 AND SelectedVia = 3 LIMIT 1'
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No hay usuarios en la vía 3.' });
+        }
+
+        const user = rows[0];
+
+        await db.execute(
+            'UPDATE Empleados SET IsLoggedIn = NULL, SelectedVia = NULL WHERE Id = ?',
+            [user.Id]
+        );
+
+        return res.status(200).json({ message: 'Usuario actualizado correctamente.' });
+    } catch (error) {
+        console.error('Error al cerrar sesión en vía 3:', error);
+        return res.status(500).json({ message: 'Error en el servidor.' });
+    }
+};
+
+export const logoutVia4 = async (req, res) => {
+    try {
+        const db = await connectDB();
+
+        const [rows] = await db.execute(
+            'SELECT * FROM Empleados WHERE IsLoggedIn = 1 AND SelectedVia = 4 LIMIT 1'
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No hay usuarios en la vía 4.' });
+        }
+
+        const user = rows[0];
+
+        await db.execute(
+            'UPDATE Empleados SET IsLoggedIn = NULL, SelectedVia = NULL WHERE Id = ?',
+            [user.Id]
+        );
+
+        return res.status(200).json({ message: 'Usuario actualizado correctamente.' });
+    } catch (error) {
+        console.error('Error al cerrar sesión en vía 4:', error);
+        return res.status(500).json({ message: 'Error en el servidor.' });
+    }
+};
+

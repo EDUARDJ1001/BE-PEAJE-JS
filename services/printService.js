@@ -6,8 +6,8 @@ escpos.USB = usb;
 export const printTicket = (boleto, userData) => {
     return new Promise((resolve, reject) => {
         try {
-            const device = new escpos.USB(); 
-            const printer = new escpos.Printer(device);
+            const device = new escpos.USB();
+            const printer = new escpos.Printer(device); 
 
             device.open(() => {
                 printer
@@ -27,11 +27,16 @@ export const printTicket = (boleto, userData) => {
                     .text('Contribución por mejoras')
                     .cut()
                     .close();
-                
+
                 resolve('Impresión exitosa');
             });
+            
+            device.on('error', (err) => {
+                reject(`Error de dispositivo: ${err}`);
+            });
+
         } catch (error) {
-            reject(error);
+            reject(`Error de impresión: ${error.message}`);
         }
     });
 };

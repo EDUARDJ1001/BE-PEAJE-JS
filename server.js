@@ -34,8 +34,6 @@ app.get('/', (req, res) => {
     `);
 });
 
-
-
 registerRoutes(app);
 
 const PORT = process.env.PORT || 4000;

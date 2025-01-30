@@ -1,6 +1,6 @@
 import printTicket from '../services/printService.js';
 
-const printBoleto = async (req, res) => {
+export const printBoleto = async (req, res) => {
     try {
         const { boleto, userData } = req.body;
 
@@ -14,5 +14,3 @@ const printBoleto = async (req, res) => {
         res.status(500).json({ message: 'Error al imprimir', error: error.message });
     }
 };
-
-export default printBoleto;

@@ -1,4 +1,4 @@
-import printTicket from '../services/printService.js';
+import { printTicket } from "../services/printService.js";
 
 export const printBoleto = async (req, res) => {
     try {

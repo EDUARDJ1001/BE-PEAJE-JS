@@ -1,5 +1,7 @@
-const escpos = require('escpos');
-escpos.USB = require('escpos-usb');
+import escpos from 'escpos';
+import usb from 'escpos-usb';
+
+escpos.USB = usb;
 
 const printTicket = (boleto, userData) => {
     return new Promise((resolve, reject) => {
@@ -34,4 +36,4 @@ const printTicket = (boleto, userData) => {
     });
 };
 
-module.exports = { printTicket };
+export default printTicket;

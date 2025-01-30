@@ -1,4 +1,4 @@
-const { printTicket } = require("../services/printService.js");
+import printTicket from '../services/printService.js';
 
 const printBoleto = async (req, res) => {
     try {
@@ -15,4 +15,4 @@ const printBoleto = async (req, res) => {
     }
 };
 
-module.exports = { printBoleto };
+export default printBoleto;

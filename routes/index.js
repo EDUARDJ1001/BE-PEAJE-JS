@@ -11,6 +11,7 @@ import reporteVentasRoutes from './reporteVentasRoutes.js';
 import authRoutes from './authRoutes.js';
 import userRoutes from './userRoutes.js';
 import crearRutasContador from './contadorRoutes.js';
+import printRoutes from './printRoutes.js';
 
 const registerRoutes = (app) => {
     app.use('/api/generos', generoRoutes);
@@ -34,6 +35,8 @@ const registerRoutes = (app) => {
     app.use('/api/contador-v2', crearRutasContador('Contador_V2'));
     app.use('/api/contador-v3', crearRutasContador('Contador_V3'));
     app.use('/api/contador-v4', crearRutasContador('Contador_V4'));
+
+    app.use('/api/print', printRoutes);
 };
 
 export default registerRoutes;

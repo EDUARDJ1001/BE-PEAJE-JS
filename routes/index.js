@@ -37,6 +37,7 @@ const registerRoutes = (app) => {
     app.use('/api/contador-v4', crearRutasContador('Contador_V4'));
 
     app.use('/api/print', printRoutes);
+
 };
 
 export default registerRoutes;

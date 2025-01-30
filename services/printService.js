@@ -3,7 +3,7 @@ import usb from 'escpos-usb';
 
 escpos.USB = usb;
 
-const printTicket = (boleto, userData) => {
+export const printTicket = (boleto, userData) => {
     return new Promise((resolve, reject) => {
         try {
             const device = new escpos.USB(); 
@@ -35,5 +35,3 @@ const printTicket = (boleto, userData) => {
         }
     });
 };
-
-export default printTicket;

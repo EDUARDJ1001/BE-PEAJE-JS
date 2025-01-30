@@ -1,5 +1,5 @@
 import express from 'express';
-import { printBoleto } from '../controllers/printController';
+import { printBoleto } from '../controllers/printController.js';
 
 const router = express.Router();
 

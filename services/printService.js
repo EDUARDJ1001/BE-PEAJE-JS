@@ -6,7 +6,7 @@ escpos.USB = usb;
 export const printTicket = (boleto, userData) => {
     return new Promise((resolve, reject) => {
         try {
-            const device = new escpos.USB();
+            const device = "epson tm-t88vi receipt2";
             const printer = new escpos.Printer(device); 
 
             device.open(() => {
